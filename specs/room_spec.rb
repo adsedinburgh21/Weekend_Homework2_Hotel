@@ -1,13 +1,15 @@
 require( 'minitest/autorun' )
 require( 'minitest/rg' )
 require_relative( '../room.rb' )
+require_relative( '../guests.rb')
 
 class RoomTest < MiniTest::Test
 
   def setup
     @room1 = Room.new( { name: "Room 1", room_size: 2, daily_rate: 50} )
 
-    @guest1 = "Steve"
+
+    @guest1 = Guests.new(name: "The Reids", number_of_guests: 2, money: 5000, days_staying: 7)
 
   end
 
