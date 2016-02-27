@@ -13,6 +13,8 @@ class RoomTest < MiniTest::Test
   
     @guests2 = Guests.new({name: "The Bennetts", number_of_guests: 1, money: 1000, days_booked: 4})
 
+    @guests3 = Guests.new({name: "Motorhead", number_of_guests: 3, money: 3000, days_booked: 2})
+
   end
 
   def test_has_room_got_name
@@ -42,6 +44,11 @@ class RoomTest < MiniTest::Test
     assert_equal(@guests1, @room1.current_guests)
   end
 
+  def test_check_in_over_room_capacity
+    @room1.check_in(@guests3)
+    assert_equal(nil, @room1.current_guests)
+  end
+
   def test_check_out
     @room1.check_in(@guests1)
     @room1.check_out
@@ -56,4 +63,5 @@ class RoomTest < MiniTest::Test
   def test_current_occupancy_vacant_room
     assert_equal(0, @room1.current_occupancy)
   end
+
 end

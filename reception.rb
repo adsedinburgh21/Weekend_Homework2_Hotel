@@ -22,14 +22,15 @@ class Reception
   end
   #### could I use a block here ?? (and below)
 
-#### DO TEST FOR THIS !
+#### FIX THIS -  TEST NOT PASSING !
   def hotel_current_occupancy
     hotel_current_occupancy = 0
     for room in @all_rooms
-      hotel_current_occupancy << room.current_occupancy
+      hotel_current_occupancy += room.current_guests.number_of_guests
+      # current_occupancy
     end
   end
-##### I have not tested for this above yet. will need to fill lots of rooms in the test then ask what the occupancy is- make sure to put some single guests in double rooms in the test.
+########  NEED TO FIX THIS - TEST NOT PASSING !!   doesnt recognise number_of_guests ###########
 
 
   def vacant_rooms
@@ -63,7 +64,7 @@ def final_guests_checkout(guests, room)
     room.check_out
   end
 end
-### should there be some sort of error message if try to check out of empty room?
+### should there be some sort of error message if try to check out of an empty/vacant room?
 
 
 

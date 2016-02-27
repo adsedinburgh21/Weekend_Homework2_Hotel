@@ -47,6 +47,7 @@ class TestReception < MiniTest::Test
     assert_equal(0, @reception.revenue)
   end
 
+    #### Not really needed 
   # def test_hotel_revenue_after_guests_check_out
   #   @room1.check_in(@guests3)
   #   @reception.final_guests_checkout(@guests3, @room1)
@@ -62,8 +63,14 @@ class TestReception < MiniTest::Test
     assert_equal(12, result)
   end
 
-  # def test_hotel_current_occupancy
-  # end
+  def test_hotel_current_occupancy
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    @room2.check_in(@guests4)
+    @room1.check_in(@guests5)
+    assert_equal(7, @reception.hotel_current_occupancy)
+  end
 
   # def test_vacant_rooms
   # end

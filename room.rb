@@ -9,13 +9,17 @@ class Room
     @daily_rate = params[:daily_rate]
   end
 
+  def is_room_too_small(guests)
+    guests.number_of_guests > room_size ? @over_capacity = true : @over_capacity = nil
+  end
   
   def check_in(guests)
-    if current_guests.nil?
-      @current_guests = guests #unless 'is_room_too_small' == true
+    is_room_too_small(guests)
+    if current_guests.nil? && @over_capacity.nil?
+      @current_guests = guests
     end
   end
-  #### do i need to output anything to say the check in wasnt successful if room is already occupied (or is too small)?
+  #### do i need to output anything to say the check_in wasnt successful if room is already occupied or is too small?
   
   def check_out
     @current_guests = nil
@@ -24,9 +28,8 @@ class Room
   def current_occupancy
     @current_guests.nil? ? 0 : @current_guests.number_of_guests 
   end
-  #### if current guests are nil then return 0 else return no of people in room
+  #### above means: if current guests == nil then return 0 else return no.of people in room
 
-  #### set so that guests.number_of_guests cant be more than the size of the room. mbe make a 'is_room_too_small' method that is set to false and true if guests.number_of_guests > room.room_size. then add an unless to check_in saying unless is_room_too_small == true.
 
 
 end
