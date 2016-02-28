@@ -47,13 +47,6 @@ class TestReception < MiniTest::Test
     assert_equal(0, @reception.revenue)
   end
 
-    #### Not really needed 
-  # def test_hotel_revenue_after_guests_check_out
-  #   @room1.check_in(@guests3)
-  #   @reception.final_guests_checkout(@guests3, @room1)
-  #   assert_equal(150, @reception.revenue)
-  # end
-
   def test_hotel_total_rooms
     assert_equal(8, @reception.hotel_total_rooms)
   end
@@ -72,13 +65,36 @@ class TestReception < MiniTest::Test
     assert_equal(7, @reception.hotel_current_occupancy)
   end
 
-  # def test_vacant_rooms
-  # end
+  def test_list_vacant_rooms
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    @room2.check_in(@guests4)
+    @room1.check_in(@guests5)
+    assert_equal(["Room 3", "Room 4", "Room 5"], @reception.list_vacant_rooms)
+  end
 
-  # def test_occupied_rooms
-  # end
+  def test_number_of_vacant_rooms
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    assert_equal(5, @reception.number_of_vacant_rooms)
+  end
+
+  def test_list_occupied_rooms
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    assert_equal(["Room 6", "Room 7", "Room 8"], @reception.list_occupied_rooms)
+  end
+
+  def test_number_of_occupied_rooms
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    assert_equal(3, @reception.number_of_occupied_rooms)
+  end
     
-
   def test_bill_total
     result = @reception.bill_total(@guests1, @room8)
     assert_equal(840, result)
@@ -109,5 +125,17 @@ class TestReception < MiniTest::Test
     assert_equal( 840, @reception.bill_total(@guests1, @room8) )
     assert_equal( 5000, @guests1.money )
     assert_equal( 0, @reception.revenue )
+  end
+
+  def test_refund_guests
+    @reception.refund_guests(@guests1, 500)
+    assert_equal(5500, @guests1.money)
+    assert_equal(-500, @reception.revenue)
+  end
+
+  def test_what_room_are_guests_in
+    @room8.check_in(@guests1)
+    result = @reception.what_room_are_guests_in("The Reids")
+    assert_equal("Room 8", result)
   end
 end

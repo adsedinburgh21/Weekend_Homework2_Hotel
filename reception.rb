@@ -20,27 +20,45 @@ class Reception
     end
     return hotel_max_occupancy 
   end
-  #### could I use a block here ?? (and below)
-
-#### FIX THIS -  TEST NOT PASSING !
+  #######
+  #### could I use a blocks here ?? (above and below)
+  #######
   def hotel_current_occupancy
     hotel_current_occupancy = 0
     for room in @all_rooms
-      hotel_current_occupancy += room.current_guests.number_of_guests
-      # current_occupancy
+      hotel_current_occupancy += room.current_occupancy
     end
-  end
-########  NEED TO FIX THIS - TEST NOT PASSING !!   doesnt recognise number_of_guests ###########
-
-
-  def vacant_rooms
-    ## room.current_guests.nil?
+    return hotel_current_occupancy
   end
 
-  def occupied_rooms
-    
+  def list_vacant_rooms
+    vacant_rooms = []
+    for room in @all_rooms
+      if room.current_guests.nil?
+        vacant_rooms << room.name
+      end
+    end
+    return vacant_rooms
   end
 
+  def number_of_vacant_rooms
+    list_vacant_rooms.length
+  end
+
+  def list_occupied_rooms
+    occupied_rooms = []
+    for room in @all_rooms
+      occupied_rooms << room.name unless room.current_guests.nil?
+    end
+    return occupied_rooms
+  end
+
+  def number_of_occupied_rooms
+    list_occupied_rooms.length
+  end
+
+
+  #### fire drill : return names of all guests (for room in rooms room.name_of_current guests) and rooms they are in, plus total number of guests in hotel
 
   def bill_total(guests, room)
     return (guests.days_booked*room.daily_rate)
@@ -55,56 +73,30 @@ class Reception
   end
 
 
-### final_guests_checkout: works out bill, debits guests, credits hotel revenue, and checks guests out of room. The unless line is incase wrong(empty) room entered in error or incase someone tries to check out a guest that has already cheacked out- wont allow checkout of an empty room as this would erroneously charge guests.
-def final_guests_checkout(guests, room)
-  unless room.current_guests.nil?
-    bill = bill_total(guests, room)
-    guests.pay(bill)
-    credit_hotel(bill)
-    room.check_out
+  ### final_guests_checkout: works out bill, debits guests, credits hotel revenue, and checks guests out of room. The unless line is incase wrong(empty) room entered in error or incase someone tries to check out a guest that has already cheacked out- wont allow checkout of an empty room as this would erroneously charge guests.
+  def final_guests_checkout(guests, room)
+    unless room.current_guests.nil?
+      bill = bill_total(guests, room)
+      guests.pay(bill)
+      credit_hotel(bill)
+      room.check_out
+    end
   end
-end
-### should there be some sort of error message if try to check out of an empty/vacant room?
 
+  ### should there be some sort of error message if try to check out of an empty/vacant room?
+  #### Maybe this sort of thing should be in an end version called Hotel that runs everything. then I could put in user input in to say error etc ??
 
+  def refund_guests(guests, refund_value)
+    guests.refund(refund_value)
+    debit_hotel(refund_value)
+  end
 
-
-
-
-
-
-
-#### could get array of empty rooms and do .length on it to show how many rooms available
-
-  # def occupied_rooms
-  #   occupied_rooms = []
-  #   for room in @all_rooms
-  #     if room.current_guests.nil?
-  #    end
-  # end
-#### blocks !!!?
-
-## @all_rooms.inject(0){|room| room.current_guests.number_of_guests} ??
-##### need another method !! to work out 'room_occupancy' (current no in room). this should also let you set a max limit of people per room, eg,room_occupancy cant > room_size. this might go in the check in function in rooms as an if statement.
-
-
-
-
-
-  # def total_people_in_hotel    ### fire drill? 
-  #   total_individual_guests = 0
-  #   for room in @all_rooms
-  #     if room.current_guests.nil?
-  #   ##  'room.current_guests'  should be a method 'occupied_rooms' - could also make 'vacant_rooms'
-  #     else
-  #       total_individual_guests += room.current_guests.number_of_guests
-  #     end
-  #   end
-  #   return total_individual_guests
-  # end
-
-####  split up in to more methods: are rooms full, empty
-
-
+  def what_room_are_guests_in(guests_name)
+    for room in @all_rooms
+      if room.name_of_current_guests == guests_name
+        return room.name
+      end
+    end
+  end
 
 end

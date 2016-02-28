@@ -9,12 +9,16 @@ class RoomTest < MiniTest::Test
     @room1 = Room.new( { name: "Room 1", room_size: 2, daily_rate: 50} )
 
 
-    @guests1 = Guests.new({name: "The Reids", number_of_guests: 2, money: 5000, days_staying: 7})
+    @guests1 = Guests.new({name: "The Reids", number_of_guests: 2, money: 5000, days_booked: 7})
   
     @guests2 = Guests.new({name: "The Bennetts", number_of_guests: 1, money: 1000, days_booked: 4})
 
     @guests3 = Guests.new({name: "Motorhead", number_of_guests: 3, money: 3000, days_booked: 2})
 
+  end
+
+  def test_rooms_start_empty
+    assert_equal(nil, @room1.current_guests)
   end
 
   def test_has_room_got_name
@@ -29,16 +33,17 @@ class RoomTest < MiniTest::Test
     assert_equal(50, @room1.daily_rate)
   end
 
-  def test_rooms_start_empty
-    assert_equal(nil, @room1.current_guests)
+  def test_is_room_too_small
+    result = @room1.is_room_too_small(@guests3)
+    assert_equal(true, result)
   end
 
-  def test_check_in_vacant_room
+  def test_check_in_to_vacant_room
     @room1.check_in(@guests1)
     assert_equal(@guests1, @room1.current_guests)
   end
 
-  def test_check_in_occupied_room
+  def test_check_in_to_occupied_room
     @room1.check_in(@guests1)
     @room1.check_in(@guests2)
     assert_equal(@guests1, @room1.current_guests)
@@ -55,7 +60,17 @@ class RoomTest < MiniTest::Test
     assert_equal( nil, @room1.current_guests)
   end
 
-  def test_current_occupancy
+  def test_name_of_current_guests
+    @room1.check_in(@guests1)
+    assert_equal("The Reids", @room1.name_of_current_guests)
+  end
+
+  def test_days_booked
+    @room1.check_in(@guests1)
+    assert_equal(7, @room1.days_booked)
+  end
+
+  def test_current_occupancy_occupied_room
     @room1.check_in(@guests2)
     assert_equal(1, @room1.current_occupancy)
   end

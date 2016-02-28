@@ -4,18 +4,19 @@ class Room
 
   def initialize(params)
     @current_guests = nil
+    @over_capacity = nil
     @name = params[:name]
     @room_size = params[:room_size]
     @daily_rate = params[:daily_rate]
   end
 
   def is_room_too_small(guests)
-    guests.number_of_guests > room_size ? @over_capacity = true : @over_capacity = nil
+    @over_capacity = guests.number_of_guests > room_size ? true : nil
   end
   
   def check_in(guests)
     is_room_too_small(guests)
-    if current_guests.nil? && @over_capacity.nil?
+    if @current_guests.nil? && @over_capacity.nil?
       @current_guests = guests
     end
   end
@@ -24,7 +25,15 @@ class Room
   def check_out
     @current_guests = nil
   end
-    
+  
+  def name_of_current_guests
+    @current_guests.name unless @current_guests.nil?
+  end
+
+  def days_booked
+    @current_guests.nil? ? 0 : @current_guests.days_booked
+  end
+
   def current_occupancy
     @current_guests.nil? ? 0 : @current_guests.number_of_guests 
   end
