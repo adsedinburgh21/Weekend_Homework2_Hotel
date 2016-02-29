@@ -94,6 +94,24 @@ class TestReception < MiniTest::Test
     @room6.check_in(@guests3)
     assert_equal(3, @reception.number_of_occupied_rooms)
   end
+
+  def test_list_all_guests_names
+    @room8.check_in(@guests1)
+    @room7.check_in(@guests2)
+    @room6.check_in(@guests3)
+    @room2.check_in(@guests4)
+    @room1.check_in(@guests5)
+    assert_equal( ["The Reids", "The Bennetts", "Ozzy Osbourne", "Jack Black", "Duff McKagan"] , @reception.list_all_guests_names)
+  end
+
+  # def test_fire_alarm
+  #   @room8.check_in(@guests1)
+  #   @room7.check_in(@guests2)
+  #   @room6.check_in(@guests3)
+  #   @room2.check_in(@guests4)
+  #   @room1.check_in(@guests5)
+  #   assert_equal( [], @reception.fire_alarm)
+  # end
     
   def test_bill_total
     result = @reception.bill_total(@guests1, @room8)

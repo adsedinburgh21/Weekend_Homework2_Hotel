@@ -57,8 +57,23 @@ class Reception
     list_occupied_rooms.length
   end
 
+  def list_all_guests_names
+    list_of_all_guests = []
+    for guest in @all_guests
+      list_of_all_guests << guest.name
+    end
+    return list_of_all_guests
+  end
 
-  #### fire drill : return names of all guests (for room in rooms room.name_of_current guests) and rooms they are in, plus total number of guests in hotel
+  #### fire drill : will create a report of the number of people in hotel, the total number of occupied rooms, what rooms are occupied, and a list of all the guests.
+  
+  # def fire_alarm
+  #   puts  "Current Hotel Occupancy: #{hotel_current_occupancy} persons."
+  #   puts "Number of occupied rooms: #{number_of_occupied_rooms}"
+  #   puts "#Occupied Rooms: #{list_occupied_rooms}"
+  #   puts "List of guests: #{list_all_guests_names}"
+  # end
+
 
   def bill_total(guests, room)
     return (guests.days_booked*room.daily_rate)
